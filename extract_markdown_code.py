@@ -32,7 +32,8 @@ def write_single_block(block: str, output_file: str) -> bool:
             os.makedirs(output_dir)
             
         with open(output_file, "w", encoding="utf-8") as out_file:
-            out_file.write(block)
+            out_file.write(block.strip())
+            out_file.write("\n")
         return True
     except Exception as e:
         print(f"Error writing to output file: {e}")
