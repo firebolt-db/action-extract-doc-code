@@ -1,0 +1,35 @@
+name: 'Extract Code Blocks from Markdown'
+description: 'Extracts code blocks of specified language from markdown files'
+author: 'Your Name'
+
+inputs:
+  input_file:
+    description: 'Path to the input markdown file'
+    required: true
+  output_file:
+    description: 'Path to the output file where extracted code will be saved'
+    required: false
+  language:
+    description: 'The programming language of code blocks to extract'
+    required: false
+    default: 'javascript'
+  block_number:
+    description: 'Specific block number to extract (1-indexed)'
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Run extract markdown code script
+      shell: bash
+      run: |
+        python ${{ github.action_path }}/extract_markdown_code.py \
+          --input "${{ inputs.input_file }}" \
+          ${{ inputs.output_file && format('--output "{0}"', inputs.output_file) }} \
+          ${{ inputs.language && format('--language "{0}"', inputs.language) }} \
+          ${{ inputs.block_number && format('--block "{0}"', inputs.block_number) }}
